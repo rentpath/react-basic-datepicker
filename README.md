@@ -27,4 +27,4 @@ You can customise the datepicker by supplying the follow props.
 - `handleDateChange` e.g. set state or do whatever with the date...
 - `datepickerName` e.g. `my-date-picker`
 - `datepickerId` e.g. `my-date-picker`
-- `datepickerClassName` e.g. `my-date-picker`
+- `className` e.g. `my-date-picker`
