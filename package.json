@@ -4,10 +4,10 @@
   "description": "A barebones, no-frills datepicker for React",
   "scripts": {
     "lint": "eslint src",
-    "start": "webpack-dev-server --open --hot",
+    "start": "webpack -p; webpack-dev-server --open --hot",
     "prepublish": "babel src --out-dir lib --ignore __tests__",
     "test": "./node_modules/.bin/jest",
-    "build": "webpack -p"
+    "build": "yarn run prepublish"
   },
   "repository": "https://github.com/chrisborrowdale/react-basic-datepicker",
   "keywords": [

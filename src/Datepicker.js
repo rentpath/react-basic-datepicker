@@ -17,6 +17,7 @@ export default class Datepicker extends Component {
     this.onOutsideClick = this.onOutsideClick.bind(this)
     this.handleCalendarVisibility = this.handleCalendarVisibility.bind(this)
     this.dateChange = this.dateChange.bind(this)
+    this.outsideHandler = null
 
     this.state = {
       showCalendar: false,
@@ -27,11 +28,19 @@ export default class Datepicker extends Component {
 
   componentWillMount() {
     var _this = this
-    document.addEventListener('click', this.onOutsideClick, false)
     if (hasOpenHandler(_this.props)) {
       _this.props.externalOpenHandler.subscribe(function(next) {
         _this.handleCalendarVisibility()
       })
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state.showCalendar && !this.outsideHandler) {
+      document.removeEventListener('click', this.onOutsideClick, false)
+      this.outsideHandler = document.addEventListener('click', this.onOutsideClick, false)
+    } else if (this.outsideHandler) {
+      document.removeEventListener(this.outsideHandler, this.onOutsideClick, false)
     }
   }
 
