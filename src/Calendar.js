@@ -5,6 +5,7 @@ import addMonths from 'date-fns/add_months'
 import subMonths from 'date-fns/sub_months'
 import isBefore from 'date-fns/is_before'
 import isEqual from 'date-fns/is_equal'
+import isAfter from 'date-fns/is_after';
 
 export default class Calendar extends Component {
   constructor(props) {
@@ -31,8 +32,9 @@ export default class Calendar extends Component {
 
   handleDateSelected(evt) {
     const dateBefore = !isBefore(evt.target.dataset.date, new Date(format(this.props.minDate, 'MM/DD/YYYY')))
+    const dateAfter = !isAfter(evt.target.dataset.date, new Date(format(this.props.maxDate, 'MM/DD/YYYY')))
 
-    if (dateBefore) {
+    if (dateBefore && dateAfter) {
       this.setState({
         selectedDate: new Date(format(evt.target.dataset.date, 'MM/DD/YYYY'))
       })

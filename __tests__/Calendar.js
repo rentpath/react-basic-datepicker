@@ -51,18 +51,20 @@ test('Can move to the previous month', () => {
 });
 
 test('Selecting a date updates state if current or future date', () => {
+  const eventDate = 'Thu Dec 01 2019 00:00:00'
   const node = {
     target: {
       dataset: {
-        date: 'Thu Dec 01 2019 00:00:00 GMT+0000 (GMT)'
+        date: eventDate
       }
     }
   }
-
-  const calendar = mount(<Calendar dateChange={jest.fn()} />)
+  
+  const startDate = new Date(2016, 1, 1)
+  const calendar = mount(<Calendar dateChange={jest.fn()} startDate={startDate}/>)
 
   calendar.instance().handleDateSelected(node)
-  expect(calendar.state().selectedDate).toEqual(new Date(2019, 11))
+  expect(calendar.state().selectedDate).toEqual(new Date(eventDate))
 });
 
 test('Selecting a date does not update state if < minDate', () => {
@@ -74,9 +76,26 @@ test('Selecting a date does not update state if < minDate', () => {
     }
   }
 
-  const date = new Date()
+  const date = new Date(2017, 2, 2)
   const calendar = mount(<Calendar startDate={date} dateChange={jest.fn()} />)
 
   calendar.instance().handleDateSelected(node)
   expect(calendar.state().selectedDate).toEqual(date)
+});
+
+test('Selecting a date does not update state if > maxDate', () => {
+  const node = {
+    target: {
+      dataset: {
+        date: 'Dec 01 2018 00:00:00'
+      }
+    }
+  }
+
+  const startDate = new Date(2017, 1, 1)
+  const maxDate = new Date(2018, 10, 30)
+  const calendar = mount(<Calendar startDate={startDate} dateChange={jest.fn()} maxDate={maxDate} />)
+
+  calendar.instance().handleDateSelected(node)
+  expect(calendar.state().selectedDate).toEqual(startDate)
 });
