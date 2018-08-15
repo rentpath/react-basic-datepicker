@@ -78,7 +78,7 @@ export default class Datepicker extends Component {
       >
         <input name={this.props.datepickerName} className={this.props.datepickerClassName} id={this.props.datepickerId} onFocus={open} value={format(this.state.selectedDate, this.props.dateFormat)} readOnly />
 
-        {this.state.showCalendar && <Calendar startDate={this.state.selectedDate} dateChange={this.dateChange} minDate={this.props.minDate} />}
+        {this.state.showCalendar && <Calendar startDate={this.state.selectedDate} dateChange={this.dateChange} minDate={this.props.minDate} maxDate={this.props.maxDate} />}
       </div>
     )
   }
