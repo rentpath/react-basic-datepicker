@@ -22,6 +22,7 @@ You can customise the datepicker by supplying the follow props.
 - `dateFormat` e.g. DD-MM-YYYY
 - `startDate` e.g. `new Date()`
 - `minDate` e.g. `new Date(2016, 11)`
+- `maxDate` e.g. `new Date(2019, 9)`
 - `prevButtonLabel` e.g. 'Previous Month'
 - `nextButtonLabel` e.g. 'Next Month'
 - `handleDateChange` e.g. set state or do whatever with the date...

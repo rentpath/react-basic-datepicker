@@ -5,6 +5,7 @@ import addMonths from 'date-fns/add_months'
 import subMonths from 'date-fns/sub_months'
 import isBefore from 'date-fns/is_before'
 import isEqual from 'date-fns/is_equal'
+import isAfter from 'date-fns/is_after';
 
 export default class Calendar extends Component {
   constructor(props) {
@@ -30,9 +31,11 @@ export default class Calendar extends Component {
   }
 
   handleDateSelected(evt) {
-    const dateBefore = !isBefore(evt.target.dataset.date, new Date(format(this.props.minDate, 'MM/DD/YYYY')))
+    const dateNotBeforeMin = !isBefore(evt.target.dataset.date, new Date(format(this.props.minDate, 'MM/DD/YYYY')))
+    const dateNotAfterMax = !isAfter(evt.target.dataset.date, new Date(format(this.props.maxDate, 'MM/DD/YYYY')))
 
-    if (dateBefore) {
+    // If date is within acceptable range, set state. Otherwise, do nothing.
+    if (dateNotBeforeMin && dateNotAfterMax) {
       this.setState({
         selectedDate: new Date(format(evt.target.dataset.date, 'MM/DD/YYYY'))
       })
@@ -44,10 +47,13 @@ export default class Calendar extends Component {
   daysOfMonth() {
     const daysOfMonth = []
     const daysInMonth = getDaysInMonth(this.state.date) + 1
-
+    
     for (let dateIndex = 1; dateIndex < daysInMonth; dateIndex += 1) {
-      const isDisabled = isBefore(new Date(format(this.state.date, `MM/${dateIndex}/YYYY`)), new Date(format(this.props.minDate, 'MM/DD/YYYY')))
-
+      const dt = new Date(format(this.state.date, `MM/${dateIndex}/YYYY`))
+      const isDisabled =
+        isBefore(dt, new Date(format(this.props.minDate, 'MM/DD/YYYY'))) ||
+        isAfter(dt, new Date(format(this.props.maxDate, 'MM/DD/YYYY')))
+        
       const date = isEqual(new Date(format(this.state.selectedDate, `MM/${dateIndex}/YYYY`)), new Date(format(this.state.date, 'MM/DD/YYYY')))
 
       daysOfMonth.push(
