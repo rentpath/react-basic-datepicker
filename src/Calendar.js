@@ -51,8 +51,7 @@ export default class Calendar extends Component {
     for (let dateIndex = 1; dateIndex < daysInMonth; dateIndex += 1) {
       const dt = new Date(format(this.state.date, `MM/${dateIndex}/YYYY`))
       const isDisabled =
-        isBefore(dt, new Date(format(this.props.minDate, 'MM/DD/YYYY'))) 
-        ||
+        isBefore(dt, new Date(format(this.props.minDate, 'MM/DD/YYYY'))) ||
         isAfter(dt, new Date(format(this.props.maxDate, 'MM/DD/YYYY')))
         
       const date = isEqual(new Date(format(this.state.selectedDate, `MM/${dateIndex}/YYYY`)), new Date(format(this.state.date, 'MM/DD/YYYY')))
