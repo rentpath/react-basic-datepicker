@@ -31,10 +31,10 @@ export default class Calendar extends Component {
   }
 
   handleDateSelected(evt) {
-    const dateBefore = !isBefore(evt.target.dataset.date, new Date(format(this.props.minDate, 'MM/DD/YYYY')))
-    const dateAfter = !isAfter(evt.target.dataset.date, new Date(format(this.props.maxDate, 'MM/DD/YYYY')))
+    const dateNotBeforeMin = !isBefore(evt.target.dataset.date, new Date(format(this.props.minDate, 'MM/DD/YYYY')))
+    const dateNotAfterMax = !isAfter(evt.target.dataset.date, new Date(format(this.props.maxDate, 'MM/DD/YYYY')))
 
-    if (dateBefore && dateAfter) {
+    if (dateNotBeforeMin && dateNotAfterMax) {
       this.setState({
         selectedDate: new Date(format(evt.target.dataset.date, 'MM/DD/YYYY'))
       })
