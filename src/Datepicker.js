@@ -110,7 +110,7 @@ export default class Datepicker extends Component {
           onChange={this.props.enableTextInput ? this.handleChange : null}
         />
 
-        {this.state.showCalendar && <Calendar startDate={this.state.selectedDate} dateChange={this.dateChange} minDate={this.props.minDate} maxDate={this.props.maxDate} />}
+        {this.state.showCalendar && <Calendar startDate={this.state.selectedDate} dateChange={this.dateChange} minDate={this.props.minDate} maxDate={this.props.maxDate} prevButtonLabel={this.props.prevButtonLabel} nextButtonLabel={this.props.nextButtonLabel} />}
       </div>
     )
   }
@@ -122,5 +122,7 @@ Datepicker.defaultProps = {
   datepickerName: 'react-simple-datepicker',
   datepickerId: 'react-simple-datepicker',
   datepickerClassName: 'react-simple-datepicker-input',
-  enableTextInput: false
+  enableTextInput: false,
+  prevButtonLabel: String.fromCharCode(8592),
+  nextButtonLabel: String.fromCharCode(8594),
 };
