@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
+import isAfter from 'date-fns/is_after'
+import isBefore from 'date-fns/is_before'
+import isValid from 'date-fns/is_valid'
 import format from 'date-fns/format'
 import Calendar from './Calendar'
 
@@ -18,10 +20,12 @@ export default class Datepicker extends Component {
     this.handleCalendarVisibility = this.handleCalendarVisibility.bind(this)
     this.dateChange = this.dateChange.bind(this)
     this.outsideHandler = null
+    this.handleChange = this.handleChange.bind(this)
 
     this.state = {
       showCalendar: false,
       selectedDate: this.props.startDate,
+      textInput: '',
       usingExternalOpenHandler: hasOpenHandler(this.props)
     }
   }
@@ -58,7 +62,8 @@ export default class Datepicker extends Component {
     if (this.props.handleDateChange) this.props.handleDateChange(selectedDate)
     this.setState({
       selectedDate,
-      showCalendar: false
+      showCalendar: false,
+      textInput: format(selectedDate, this.props.dateFormat)
     })
   }
 
@@ -66,6 +71,24 @@ export default class Datepicker extends Component {
     this.setState({
       showCalendar: !this.state.showCalendar
     })
+  }
+
+  handleChange(e) {
+    const text = e.target.value
+    this.setState({
+      textInput: text
+    })
+    const dateRegex = /\d{2}\/\d{2}\/\d{4}/
+
+    // check length first to avoid doing excessive regex checks
+    if (text.length === 10 && dateRegex.test(text)) {
+      const theDate = new Date(text)
+      const isDisabled = !isValid(theDate) ||
+        isBefore(theDate, new Date(this.props.minDate)) ||
+        isAfter(theDate, new Date(this.props.maxDate))
+      
+      if (!isDisabled) { this.dateChange(text) }
+    }
   }
 
   render() {
@@ -76,7 +99,16 @@ export default class Datepicker extends Component {
           this.mainNode = node
         }}
       >
-        <input name={this.props.datepickerName} className={this.props.datepickerClassName} id={this.props.datepickerId} onFocus={open} value={format(this.state.selectedDate, this.props.dateFormat)} readOnly />
+        <input
+          name={this.props.datepickerName} 
+          className={this.props.datepickerClassName} 
+          id={this.props.datepickerId} onFocus={open} 
+          value={this.props.enableTextInput ? 
+            this.state.textInput : 
+            format(this.state.selectedDate, this.props.dateFormat)} 
+          readOnly={!this.props.enableTextInput}
+          onChange={this.props.enableTextInput ? this.handleChange : null}
+        />
 
         {this.state.showCalendar && <Calendar startDate={this.state.selectedDate} dateChange={this.dateChange} minDate={this.props.minDate} maxDate={this.props.maxDate} />}
       </div>
@@ -90,4 +122,5 @@ Datepicker.defaultProps = {
   datepickerName: 'react-simple-datepicker',
   datepickerId: 'react-simple-datepicker',
   datepickerClassName: 'react-simple-datepicker-input',
+  enableTextInput: false
 };
