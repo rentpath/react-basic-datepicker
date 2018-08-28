@@ -1,6 +1,6 @@
 import React from 'react'
 import Calendar from '../src/Calendar'
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import { format, getDaysInMonth } from 'date-fns'
 
 let calendar
@@ -99,3 +99,13 @@ test('Selecting a date does not update state if > maxDate', () => {
   calendar.instance().handleDateSelected(node)
   expect(calendar.state().selectedDate).toEqual(startDate)
 });
+
+test('calendar prevButton and nextButton props are set to arrows by default, accepts alternate labels', () => {
+  const calendar = shallow(<Calendar />)
+  expect(calendar.find('.react-datepicker-next').text()).toBe('→')
+  expect(calendar.find('.react-datepicker-previous').text()).toBe('←')
+
+  const calendar2 = shallow(<Calendar nextButtonLabel={'next'} prevButtonLabel={'prev'} />)
+  expect(calendar2.find('.react-datepicker-next').text()).toBe('next')
+  expect(calendar2.find('.react-datepicker-previous').text()).toBe('prev')
+})
